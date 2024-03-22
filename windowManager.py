@@ -1,17 +1,26 @@
-import win32gui
+import win32gui, win32process
+import psutil
 
 def windowEnumerationHandler(hwnd, top_windows):
     top_windows.append((hwnd, win32gui.GetWindowText(hwnd)))
 
 def get_data():
+    # hwnd = win32gui.GetForegroundWindow()
+    # _, pid = win32process.GetWindowThreadProcessId(hwnd)
+    # process = psutil.Process(pid)
+    # process_name = process.name()
+    # print('process name - ',process_name)
     results = []
     top_windows = []
     win32gui.EnumWindows(windowEnumerationHandler, top_windows)
-    # print(top_windows)
+    # print('last window', top_windows[len(top_windows)-1])
     try:
         for i in top_windows:
+            if "save as" in i[1].lower():
+                win32gui.ShowWindow(i[0],5)
+                win32gui.SetForegroundWindow(i[0])
+                return "save as"
             if "notepad" in i[1].lower():
-                # print(i)
                 win32gui.ShowWindow(i[0],5)
                 win32gui.SetForegroundWindow(i[0])
                 return "notepad"

@@ -1,24 +1,40 @@
 import keyboard as kb
 from windowManager import *
+
+arr = ["enter", "left", "right", "up", "down","escape", "volume up", "volume down", "plus", "minus", "multiply",
+       "divide", "save", "tab", "comma", "dot","question mark","backspace", "select all", "space", "print", "screenshot", "caps lock", "exit"]
+char_arr = ["enter", "left","right", "up", "down", "escape", "volume_up", "volume_down", '+', '-', '*', '/', 'ctrl+s',
+            'tab', ',', '.', '?', 'backspace', 'ctrl+a', "space", "ctrl+p", "windows+print_screen", "caps_lock", "alt+f4"]
+
+volume = ["volume up", "volume down", "mute"]
+volume_arr = ["volume_up", "volume_down", "volume_mute"]
+
+special = ["special one", "special two", "special three", "special four", "special five", "special six", "special seven",
+           "special eight", "special nine", "special zero"]
+special_arr = ["shift+1", "shift+2", "shift+3", "shift+4", "shift+5", "shift+6", "shift+7", "shift+8",
+               "shift+9", "shift+0"]
+
+num = ["hash one", "hash two", "hash three", "hash four", "hash five","hash six", "hash seven", "hash eight",
+       "hash nine", "hash zero"]
+num_arr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+
+arr += volume
+char_arr += volume_arr
+
+arr += special
+char_arr = special_arr
+
+arr += num
+char_arr += num_arr
+
 def func(text):
     # print("Original = ", text)
     text = text.lower()
-    text = text.split(" ")
-    key_words(text)
-    # print(text)
-    # text = backspace(text)
-    # text = splCharacters(text)
-    # text = splCharactersOthers(text)
-    # text = numbers(text)
-    # text = tabSpace(text)
-    # text = nextLine(text)
-    # text = caps(text)
-    # text = slash(text)
-
-    # result = get_data()
-    # kb.write(text)
-    # print(text)
-    # return text
+    if(text.find('help') != -1):
+        help(arr, char_arr)
+    else:
+        text = text.split(" ")
+        key_words(text, arr, char_arr)
 
 def backspace(text):
     idx = text.find('backspace')
@@ -135,16 +151,10 @@ def calculator(text):
             kb.send(i+'_key')
 
 
-def key_words(text):
+def key_words(text, arr, char_arr):
     get_data()
     # print('text before', text)
-    arr = ["special one", "special two", "special three", "special four", "special five", "special six", "special seven",
-           "special eight", "special nine", "special zero", "hash one", "hash two", "hash three", "hash four", "hash five",
-           "hash six", "hash seven", "hash eight", "hash nine", "hash zero", "enter", "left", "right", "up", "down", "escape", "volume up",
-           "volume down", "plus", "minus", "multiply", "divide"]
-    char_arr = ["shift+1", "shift+2", "shift+3", "shift+4", "shift+5", "shift+6", "shift+7", "shift+8",
-                "shift+9", "shift+0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "enter", "left",
-                "right", "up", "down", "escape", "volume_up", "volume_down", '+', '-', '*', '/']
+
     text = reform_text(text, arr)
 
     print('text = ',text)
@@ -154,6 +164,12 @@ def key_words(text):
             idx = arr.index(text[i])
             kb.send(char_arr[idx])
             print(char_arr[idx])
+        elif(text[i].lower() == 'copy'):
+            kb.send('ctrl+a')
+            kb.send('ctrl+c')
+        elif(text[i].lower() == 'paste'):
+            kb.send('right')
+            kb.send('ctrl+v')
         else:
             for j in text[i]:
                 kb.send(j)
@@ -174,3 +190,7 @@ def reform_text(text, keys):
             res.append(text[i])
             i += 1
     return res
+
+def help(arr, keys):
+    for i in range(0, len(arr)):
+        print(arr[i]," --> ", keys[i])
