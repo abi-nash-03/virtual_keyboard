@@ -1,10 +1,12 @@
 import keyboard as kb
 from windowManager import *
 
-arr = ["enter", "left", "right", "up", "down","escape", "volume up", "volume down", "plus", "minus", "multiply",
-       "divide", "save", "tab", "comma", "dot","question mark","backspace", "select all", "space", "print", "screenshot", "caps lock", "exit"]
-char_arr = ["enter", "left","right", "up", "down", "escape", "volume_up", "volume_down", '+', '-', '*', '/', 'ctrl+s',
-            'tab', ',', '.', '?', 'backspace', 'ctrl+a', "space", "ctrl+p", "windows+print_screen", "caps_lock", "alt+f4"]
+arr = ["enter", "left", "right", "up", "down","escape", "volume up", "volume down", "plus", "minus", "multiply","divide",
+       "save", "tab", "comma", "dot","question mark","backspace", "select all", "space", "print", "screenshot", "caps lock", "exit",
+       "unod", "redo"]
+char_arr = ["enter", "left","right", "up", "down", "escape", "volume_up", "volume_down", '+', '-', '*', '/',
+            'ctrl+s', 'tab', ',', '.', '?', 'backspace', 'ctrl+a', "space", "ctrl+p", "windows+print_screen", "caps_lock", "alt+f4",
+            "ctrl+z", "ctrl+shift+z"]
 
 volume = ["volume up", "volume down", "mute"]
 volume_arr = ["volume_up", "volume_down", "volume_mute"]
@@ -22,19 +24,44 @@ arr += volume
 char_arr += volume_arr
 
 arr += special
-char_arr = special_arr
+char_arr += special_arr
 
 arr += num
 char_arr += num_arr
 
+
+def clear_all():
+    kb.send('ctrl+a')
+    kb.send('backspace')
+
+
+def add_custom_hotkeys():
+    kb.add_hotkey('space+c', clear_all)
+
+
+#Abbrivated text can be expanded with a space key press
+def add_abbreviation():
+    kb.add_abbreviation('//', 'This is a sample abbrivated text')
+    kb.add_abbreviation('hru', 'How are you?')
+    kb.add_abbreviation('wfh', 'Work from home')
+    kb.add_abbreviation('eod', 'End of the Day')
+
+
 def func(text):
     # print("Original = ", text)
+    # kb.add_hotkey('space', lambda: print('space was pressed!'))
+    add_custom_hotkeys()
+    add_abbreviation()
+    # kb.wait()
+    # kb.wait()
     text = text.lower()
-    if(text.find('help') != -1):
+
+    if text.find('help') != -1:
         help(arr, char_arr)
     else:
         text = text.split(" ")
         key_words(text, arr, char_arr)
+
 
 def backspace(text):
     idx = text.find('backspace')
@@ -43,19 +70,21 @@ def backspace(text):
     text = front+end
     return text
 
+
 def splCharacters(text):
-    arr = ["special one", "special two", "special three", "special four", "special five", "special six", "special seven",
+    sample_arr = ["special one", "special two", "special three", "special four", "special five", "special six", "special seven",
            "special eight", "special nine", "special zero"]
-    char_arr = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"]
-    for i in range(0, len(arr)):
-        while text.find(arr[i]) != -1:
-            l  = len(arr[i])
-            idx = text.find(arr[i])
+    sample_char_arr = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"]
+    for i in range(0, len(sample_arr)):
+        while text.find(sample_arr[i]) != -1:
+            l  = len(sample_arr[i])
+            idx = text.find(sample_arr[i])
             first = text[:idx]
             last = text[idx+l:]
-            text = first+char_arr[i]+last
+            text = first+sample_char_arr[i]+last
 
     return text
+
 
 def splCharactersOthers(text):
     arr = ["special minus one", "special minus two", "special minus three", "special minus four", "special minus five", "special minus six",
@@ -87,6 +116,7 @@ def numbers(text):
             text = first+num_val[i]+last
     return text
 
+
 def tabSpace(text):
     key = "tab space"
     l = len(key)
@@ -98,6 +128,7 @@ def tabSpace(text):
             text = first+"   "+last
     return text
 
+
 def nextLine(text):
     key = "next line"
     idx = text.find(key)
@@ -107,6 +138,7 @@ def nextLine(text):
         last = text[idx+l:]
         text = first+"\n"+last
     return text
+
 
 def caps(text):
     key = "caps lock"
@@ -128,6 +160,7 @@ def caps(text):
 
     return text
 
+
 def slash(text):
     key1 = 'forward slash'
     key2 = 'backward slash'
@@ -143,6 +176,7 @@ def slash(text):
             last = '\\'+text[idx2+len(key2):]
             text = first+last
     return text
+
 
 def calculator(text):
     keys = ['divide', 'multiply', 'add', 'subtract']
@@ -175,6 +209,7 @@ def key_words(text, arr, char_arr):
                 kb.send(j)
         # kb.send('space')
 
+
 def reform_text(text, keys):
     res = []
     n = len(text)
@@ -190,6 +225,7 @@ def reform_text(text, keys):
             res.append(text[i])
             i += 1
     return res
+
 
 def help(arr, keys):
     for i in range(0, len(arr)):

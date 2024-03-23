@@ -5,11 +5,6 @@ def windowEnumerationHandler(hwnd, top_windows):
     top_windows.append((hwnd, win32gui.GetWindowText(hwnd)))
 
 def get_data():
-    # hwnd = win32gui.GetForegroundWindow()
-    # _, pid = win32process.GetWindowThreadProcessId(hwnd)
-    # process = psutil.Process(pid)
-    # process_name = process.name()
-    # print('process name - ',process_name)
     results = []
     top_windows = []
     win32gui.EnumWindows(windowEnumerationHandler, top_windows)
